@@ -1,6 +1,8 @@
 # Closed-Form Discrete Mechanics for Non-Holonomic Inversion: Analytical Formulation and Benchmark of the Asymmetric Tippe Top via the FL-Protocol
 
-**Author:** Ameen Khan [engine@shap.online] | **Repository:** [SHAP-STUDIO/Research](https://github.com/SHAP-STUDIO/Research)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23866609.svg)](https://doi.org/10.5281/zenodo.23866609)
+
+**Author:** Ameen Khan [engine@shap.online] | **Repository:** [SHAP-STUDIO/Research](https://github.com/SHAP-STUDIO/Research) | **DOI:** [10.5281/zenodo.23866609](https://doi.org/10.5281/zenodo.23866609)
 
 ***
 
