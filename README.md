@@ -1,6 +1,6 @@
 # Closed-Form Discrete Mechanics for Non-Holonomic Inversion: Analytical Formulation and Benchmark of the Asymmetric Tippe Top via the FL-Protocol
 
-**Author:** Ameen Ullah Khan [engine@shap.online] | **Repository:** [SHAP-STUDIO/Research](https://github.com/SHAP-STUDIO/Research)
+**Author:** Ameen Khan [engine@shap.online] | **Repository:** [SHAP-STUDIO/Research](https://github.com/SHAP-STUDIO/Research)
 
 ***
 
@@ -10,44 +10,23 @@ To address this limitation, this technical report introduces a discrete mechanic
 
 ---
 
-### Universal System Parameters and Symbol Dictionary
+### Reference Experimental Rig (Rig-Alpha)
 
-The discrete mechanics framework (FL-Protocol) models the non-holonomic dynamics of any arbitrary rigid Tippe Top through the following universal parameter set. Any researcher or engineer can substitute their own physical measurements directly into these symbols:
+To establish an unambiguous physical benchmark, the formulation is evaluated on a precision-machined, asymmetric experimental rig operating under dry Coulomb sliding friction:
 
-| Symbol | Parameter Name | Physical Description & Role | SI Unit | Reference Benchmark (Rig-Alpha) |
-| :---: | :--- | :--- | :---: | :---: |
-| $M$ | Total Rigid Body Mass | Complete mass of the top | $\text{kg}$ | `0.0800` |
-| $R$ | Spherical Belly Radius | Outer radius of lower spherical envelope | $\text{m}$ | `0.0250` ($25.0\text{ mm}$) |
-| $c$ | Center-of-Mass Offset | Distance of CM below spherical geometric center | $\text{m}$ | `0.0045` ($4.5\text{ mm}$) |
-| $r_{\text{stem}}$ | Stem Radius | Outer radius of cylindrical stem contact rim | $\text{m}$ | `0.0035` ($3.5\text{ mm}$) |
-| $h_{\text{stem}}$ | Stem Length | Protruding vertical length of cylindrical stem | $\text{m}$ | `0.0160` ($16.0\text{ mm}$) |
-| $I_T$ | Transverse Moment of Inertia | Principal inertia orthogonal to symmetry axis at CM | $\text{kg}\cdot\text{m}^2$ | $3.200 \times 10^{-5}$ |
-| $I_S$ | Axial Spin Moment of Inertia | Principal inertia along symmetry spin axis at CM | $\text{kg}\cdot\text{m}^2$ | $2.400 \times 10^{-5}$ |
-| $\mu_k$ | Dynamic / Kinetic Friction | Coulomb coefficient of sliding contact friction | — | `0.180` |
-| $\mu_s$ | Static Friction | Coulomb coefficient of static contact adhesion | — | `0.250` |
-| $\Omega_0$ | Launch Angular Velocity | Initial spin velocity delivered to top at launch | $\text{rad/s}$ | `210.0` ($2005.35\text{ RPM}$) |
-| $\theta_0$ | Initial Tilt Perturbation | Initial nutation displacement angle (evaluated in radians) | $\text{rad}$ | `0.030` ($1.72^\circ$) |
-| $g$ | Gravitational Acceleration | Local standard gravitational acceleration | $\text{m/s}^2$ | `9.80665` |
-
----
-
-### Auxiliary Derived Quantities and State Functions
-
-To facilitate exact closed-form evaluation without ambiguity, the intermediate state quantities and dimensionless conductances appearing across the governing equations are defined below:
-
-| Symbol | Derived Quantity Name | Analytical Closed-Form Definition | SI Unit | Physical Role in Dynamics | Reference Value (Rig-Alpha) |
-| :---: | :--- | :---: | :---: | :--- | :---: |
-| $E_0$ | Initial Spin Kinetic Energy | $\frac{1}{2} I_S \Omega_0^2$ | $\text{J}$ | Total rotational kinetic energy available at launch | `0.529200` |
-| $\Delta U$ | Potential Energy Elevation | $M g (h_{\text{stem}} + 2c)$ | $\text{J}$ | Gravitational work required to lift CM from belly to inverted stem | `0.0196133` |
-| $d_s$ | Inverted CM Pivot Height | $R + h_{\text{stem}} + c$ | $\text{m}$ | Center-of-mass height above support plane during inverted stem rotation | `0.04550` ($45.5\text{ mm}$) |
-| $\tau_0$ | Frictional Relaxation Timescale | $\frac{I_S \Omega_0}{\mu_k M g R}$ | $\text{s}$ | Characteristic Coulomb deceleration timescale governing precession decay | `1.427603` |
-| $\eta_{\text{geom}}$ | Geometric Kinematic Ratio | $\frac{R - c}{R + r_{\text{stem}}}$ | — | Contact lever-arm ratio between belly radius and stem capture rim | `0.719298` |
-| $\eta_{\text{drag}}$ | Ascent Sliding Conductance | $\left[1 + \left(\frac{c}{\mu_k R}\right)\left(\frac{\Delta U}{2 E_0}\right)\right]^{-1}$ | — | Conductance attenuation due to sliding friction work against gravity | `0.981806` |
-| $\eta_{\text{friction}}$ | Boundary Drag Conductance | $\left[1 + (\mu_s - \mu_k)\left(\frac{r_{\text{stem}}}{R - c}\right)\right]^{-1}$ | — | Conductance drop at the geometric boundary contact transition | `0.988190` |
-| $\eta_{\text{total}}$ | Total Composite Conductance | $\eta_{\text{geom}} \cdot \eta_{\text{drag}} \cdot \eta_{\text{friction}}$ | — | Total net angular velocity transmission ratio ($\Omega_{\text{inv}} / \Omega_0$) | `0.697873` |
-
-> [!NOTE]
-> The analytical formulations below are completely universal and apply to any rigid top geometry. The numerical values from `Rig-Alpha` are included alongside the equations solely to provide an exact, worked verification benchmark.
+| Symbol | Parameter Description | Value | SI Unit |
+| :---: | :--- | :---: | :---: |
+| $M$ | Total Rigid Body Mass | `0.0800` | $\text{kg}$ |
+| $R$ | Spherical Body Outer Radius | `0.0250` | $\text{m}$ ($25.0\text{ mm}$) |
+| $c$ | Center-of-Mass Eccentricity Offset | `0.0045` | $\text{m}$ ($4.5\text{ mm}$) |
+| $r_{\text{stem}}$ | Cylindrical Peg/Stem Radius | `0.0035` | $\text{m}$ ($3.5\text{ mm}$) |
+| $h_{\text{stem}}$ | Protruding Stem Length | `0.0160` | $\text{m}$ ($16.0\text{ mm}$) |
+| $I_T$ | Transverse Moment of Inertia (CM) | $3.200 \times 10^{-5}$ | $\text{kg}\cdot\text{m}^2$ |
+| $I_S$ | Axial Spin Moment of Inertia (CM) | $2.400 \times 10^{-5}$ | $\text{kg}\cdot\text{m}^2$ |
+| $\mu_k, \mu_s$ | Coulomb Friction Coefficients (Kinetic / Static) | `0.180, 0.250` | — |
+| $\Omega_0$ | Initial Launch Angular Velocity | `210.0` | $\text{rad/s}$ ($2005.35\text{ RPM}$) |
+| $\theta_0$ | Initial Perturbation Tilt Angle | `0.030` | $\text{rad}$ ($1.72^\circ$) |
+| $g$ | Standard Gravitational Acceleration | `9.80665` | $\text{m/s}^2$ |
 
 ---
 
@@ -108,23 +87,19 @@ The critical bifurcation conditions are evaluated through two distinct stability
 
 To verify these analytical invariants against full multi-body dynamics, a reference execution engine (`tiptoe_spin`) evaluated 402 discrete milestone telemetry frames, maintaining 0.0000% First-Law mechanical energy conservation error. The dynamical verification is documented across four technical figures:
 
-1. **Figure 1: Core Kinematics & First-Law Energy Budget**
-     
+1. **Figure 1: Core Kinematics & First-Law Energy Budget**  
    ![Figure 1: Core Kinematics & First-Law Energy Budget](assets/tippe_top_3tier_telemetry.png)  
    Monotonic tilt progression ($\theta: 1.72^\circ \to 180.00^\circ$), vertical center-of-mass ascent ($z_{\text{CM}}: 20.50\text{ mm} \to 45.50\text{ mm}$), and continuous three-channel energy partitioning ($E_{\text{rot}}$, $\Delta U$, $Q_{\text{slip}}$).
 
-3. **Figure 2: Microscopic Contact Dynamics & Jellett Invariant**
-   
+2. **Figure 2: Microscopic Contact Dynamics & Jellett Invariant**  
    ![Figure 2: Microscopic Contact Dynamics & Jellett Invariant](assets/tippe_top_contact_dynamics.png)  
    Normal reaction forces ($N$), tangential friction dissipation ($F_t$, $P_{\text{slip}}$), nutation torque ($\tau$), and strict conservation of the Jellett integral ($\Lambda = 1.995 \times 10^{-4}\text{ J}\cdot\text{s}$) across contact regimes.
 
-5. **Figure 3: 2D Floor Contact Rosette & Precessional Dynamics**
-   
+3. **Figure 3: 2D Floor Contact Rosette & Precessional Dynamics**  
    ![Figure 3: 2D Floor Contact Rosette & Precessional Dynamics](assets/tippe_top_floor_precession.png)  
    Support contact trajectory ($x_Q, y_Q$), illustrating epicycloidal rosette expansion on the belly, rim touchdown at $r = 21.08\text{ mm}$, gyroscopic precession rate ($\dot{\phi} = 191.51^\circ/\text{s}$), and transverse angular velocity damping ($\omega_\perp \to 0$).
 
-7. **Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope**
-   
+4. **Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope**  
    ![Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope](assets/tippe_top_phase_space.png)  
    Nutation phase portrait ($\theta, \dot{\theta}$) and spin decay ($\theta, \Omega$), verifying that the operational parameters remain within the deterministic inversion envelope.
 
@@ -151,25 +126,23 @@ You are an expert theoretical physicist and classical mechanics specialist in no
 
 I need an analytical and rigorous numerical evaluation of the complete inversion dynamics of a spherical Tippe Top spinning on a flat horizontal table with Coulomb friction. Do not write qualitative hand-waving descriptions. I require exact formulas and high-precision numerical values (at least 4 to 5 decimal places) for the test cases specified below.
 
-### 1. Physical System Parameters & Rig Specifications:
+1. Physical System Parameters & Rig Specifications:
 Consider a rigid axisymmetric Tippe Top consisting of a spherical body truncated and attached to a cylindrical peg/stem, spinning on a rough flat surface under gravity g = 9.80665 m/s^2.
 
 Test Case: Precision Experimental Rig
-- Total mass (M): 0.0800 kg
-- Spherical body radius (R): 0.0250 m (25.0 mm)
-- Stem radius (r_stem): 0.0035 m (3.5 mm)
-- Protruding stem length (h_stem): 0.0160 m (16.0 mm)
-- Center of mass offset below geometric center (c): 0.0045 m (4.5 mm)
-- Transverse principal moment of inertia at CM (I_T): 3.200e-5 kg*m^2
-- Axial spin moment of inertia at CM (I_S): 2.400e-5 kg*m^2
-- Coulomb kinetic friction coefficient (mu_k): 0.180
-- Coulomb static friction coefficient (mu_s): 0.250
-- Launch angular velocity (Omega_0): 210.0 rad/s
-- Initial perturbation tilt angle (theta_0): 0.030 radians
+Total mass (M): 0.0800 kg
+Spherical body radius (R): 0.0250 m (25.0 mm)
+Stem radius (r_stem): 0.0035 m (3.5 mm)
+Protruding stem length (h_stem): 0.0160 m (16.0 mm)
+Center of mass offset below geometric center (c): 0.0045 m (4.5 mm)
+Transverse principal moment of inertia at CM (I_T): 3.200e-5 kg*m^2
+Axial spin moment of inertia at CM (I_S): 2.400e-5 kg*m^2
+Coulomb kinetic friction coefficient (mu_k): 0.180
+Coulomb static friction coefficient (mu_s): 0.250
+Launch angular velocity (Omega_0): 210.0 rad/s
+Initial perturbation tilt angle (theta_0): 0.030 radians
 
----
-
-### 2. Required Mathematical & Numerical Ground Truth:
+2. Required Mathematical & Numerical Ground Truth:
 
 Please evaluate and report the exact numerical answers for each of the following:
 
@@ -187,19 +160,19 @@ Please evaluate and report the exact numerical answers for each of the following
 
 4. First-Law Energy Partition Budget:
    Calculate the exact energy balance in Joules (to 6 decimal places):
-   - Initial rotational kinetic energy: E_0 = 0.5 * I_S * Omega_0^2
-   - Gravitational potential energy increase: Delta_U = M * g * (h_stem + 2*c)
-   - Final rotational kinetic energy: E_inv = 0.5 * I_S * Omega_inv^2
-   - Total thermal dissipation via sliding friction: Q_slip = E_0 - E_inv - Delta_U
-   - Confirm whether (E_inv + Delta_U + Q_slip) == E_0 with 0.000% error.
+   a) Initial rotational kinetic energy: E_0 = 0.5 * I_S * Omega_0^2
+   b) Gravitational potential energy increase: Delta_U = M * g * (h_stem + 2*c)
+   c) Final rotational kinetic energy: E_inv = 0.5 * I_S * Omega_inv^2
+   d) Total thermal dissipation via sliding friction: Q_slip = E_0 - E_inv - Delta_U
+   e) Confirm whether (E_inv + Delta_U + Q_slip) == E_0 with 0.000% error.
 
 5. Critical Boundary Regimes:
    State the physical outcome (Does it invert or remain trapped on the belly?) for:
-   - Case A (Zero-friction limit): mu_k -> 0
-   - Case B (Pure vertical launch): theta_0 -> 0
-   - Case C (Zero CM eccentricity): c = 0
-   - Case D (Dynamically spherical / isotropic inertia): I_T = I_S
-   - Case E (Sub-critical spin): Omega_0 = 89.06 rad/s
+   a) Case A (Zero-friction limit): mu_k -> 0
+   b) Case B (Pure vertical launch): theta_0 -> 0
+   c) Case C (Zero CM eccentricity): c = 0
+   d) Case D (Dynamically spherical / isotropic inertia): I_T = I_S
+   e) Case E (Sub-critical spin): Omega_0 = 89.06 rad/s
 ```
 
 ---
