@@ -108,19 +108,23 @@ The critical bifurcation conditions are evaluated through two distinct stability
 
 To verify these analytical invariants against full multi-body dynamics, a reference execution engine (`tiptoe_spin`) evaluated 402 discrete milestone telemetry frames, maintaining 0.0000% First-Law mechanical energy conservation error. The dynamical verification is documented across four technical figures:
 
-1. **Figure 1: Core Kinematics & First-Law Energy Budget**  
+1. **Figure 1: Core Kinematics & First-Law Energy Budget**
+     
    ![Figure 1: Core Kinematics & First-Law Energy Budget](assets/tippe_top_3tier_telemetry.png)  
    Monotonic tilt progression ($\theta: 1.72^\circ \to 180.00^\circ$), vertical center-of-mass ascent ($z_{\text{CM}}: 20.50\text{ mm} \to 45.50\text{ mm}$), and continuous three-channel energy partitioning ($E_{\text{rot}}$, $\Delta U$, $Q_{\text{slip}}$).
 
-2. **Figure 2: Microscopic Contact Dynamics & Jellett Invariant**  
+3. **Figure 2: Microscopic Contact Dynamics & Jellett Invariant**
+   
    ![Figure 2: Microscopic Contact Dynamics & Jellett Invariant](assets/tippe_top_contact_dynamics.png)  
    Normal reaction forces ($N$), tangential friction dissipation ($F_t$, $P_{\text{slip}}$), nutation torque ($\tau$), and strict conservation of the Jellett integral ($\Lambda = 1.995 \times 10^{-4}\text{ J}\cdot\text{s}$) across contact regimes.
 
-3. **Figure 3: 2D Floor Contact Rosette & Precessional Dynamics**  
+5. **Figure 3: 2D Floor Contact Rosette & Precessional Dynamics**
+   
    ![Figure 3: 2D Floor Contact Rosette & Precessional Dynamics](assets/tippe_top_floor_precession.png)  
    Support contact trajectory ($x_Q, y_Q$), illustrating epicycloidal rosette expansion on the belly, rim touchdown at $r = 21.08\text{ mm}$, gyroscopic precession rate ($\dot{\phi} = 191.51^\circ/\text{s}$), and transverse angular velocity damping ($\omega_\perp \to 0$).
 
-4. **Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope**  
+7. **Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope**
+   
    ![Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope](assets/tippe_top_phase_space.png)  
    Nutation phase portrait ($\theta, \dot{\theta}$) and spin decay ($\theta, \Omega$), verifying that the operational parameters remain within the deterministic inversion envelope.
 
