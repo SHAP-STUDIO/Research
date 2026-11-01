@@ -30,6 +30,21 @@ To establish an unambiguous physical benchmark, the formulation is evaluated on 
 
 ---
 
+### Auxiliary Derived Quantities and State Functions
+
+| Symbol | Derived Quantity Name | Analytical Closed-Form Definition | SI Unit | Physical Role in Dynamics | Reference Value (Rig-Alpha) |
+| :---: | :--- | :---: | :---: | :--- | :---: |
+| $E_0$ | Initial Spin Kinetic Energy | $\frac{1}{2} I_S \Omega_0^2$ | $\text{J}$ | Total rotational kinetic energy available at launch | `0.529200` |
+| $\Delta U$ | Potential Energy Elevation | $M g (h_{\text{stem}} + 2c)$ | $\text{J}$ | Gravitational work required to lift CM from belly to inverted stem | `0.0196133` |
+| $d_s$ | Inverted CM Pivot Height | $R + h_{\text{stem}} + c$ | $\text{m}$ | Center-of-mass height above support plane during inverted stem rotation | `0.04550` ($45.5\text{ mm}$) |
+| $\tau_0$ | Frictional Relaxation Timescale | $\frac{I_S \Omega_0}{\mu_k M g R}$ | $\text{s}$ | Characteristic Coulomb deceleration timescale governing precession decay | `1.427603` |
+| $\eta_{\text{geom}}$ | Geometric Kinematic Ratio | $\frac{R - c}{R + r_{\text{stem}}}$ | — | Contact lever-arm ratio between belly radius and stem capture rim | `0.719298` |
+| $\eta_{\text{drag}}$ | Ascent Sliding Conductance | $\left[1 + \left(\frac{c}{\mu_k R}\right)\left(\frac{\Delta U}{2 E_0}\right)\right]^{-1}$ | — | Conductance attenuation due to sliding friction work against gravity | `0.981806` |
+| $\eta_{\text{friction}}$ | Boundary Drag Conductance | $\left[1 + (\mu_s - \mu_k)\left(\frac{r_{\text{stem}}}{R - c}\right)\right]^{-1}$ | — | Conductance drop at the geometric boundary contact transition | `0.988190` |
+| $\eta_{\text{total}}$ | Total Composite Conductance | $\eta_{\text{geom}} \cdot \eta_{\text{drag}} \cdot \eta_{\text{friction}}$ | — | Total net angular velocity transmission ratio ($\Omega_{\text{inv}} / \Omega_0$) | `0.697873` |
+
+---
+
 ### Analytical Formulation of Discrete Invariants
 
 The discrete mechanics framework (FL-Protocol) models the complete dynamic trajectory through four exact algebraic invariants, formulated directly in SI decimal units:
@@ -87,23 +102,19 @@ The critical bifurcation conditions are evaluated through two distinct stability
 
 To verify these analytical invariants against full multi-body dynamics, a reference execution engine (`tiptoe_spin`) evaluated 402 discrete milestone telemetry frames, maintaining 0.0000% First-Law mechanical energy conservation error. The dynamical verification is documented across four technical figures:
 
-1. **Figure 1: Core Kinematics & First-Law Energy Budget**
-   
+1. **Figure 1: Core Kinematics & First-Law Energy Budget**  
    ![Figure 1: Core Kinematics & First-Law Energy Budget](assets/tippe_top_3tier_telemetry.png)  
    Monotonic tilt progression ($\theta: 1.72^\circ \to 180.00^\circ$), vertical center-of-mass ascent ($z_{\text{CM}}: 20.50\text{ mm} \to 45.50\text{ mm}$), and continuous three-channel energy partitioning ($E_{\text{rot}}$, $\Delta U$, $Q_{\text{slip}}$).
 
-2. **Figure 2: Microscopic Contact Dynamics & Jellett Invariant**
-    
+2. **Figure 2: Microscopic Contact Dynamics & Jellett Invariant**  
    ![Figure 2: Microscopic Contact Dynamics & Jellett Invariant](assets/tippe_top_contact_dynamics.png)  
    Normal reaction forces ($N$), tangential friction dissipation ($F_t$, $P_{\text{slip}}$), nutation torque ($\tau$), and strict conservation of the Jellett integral ($\Lambda = 1.995 \times 10^{-4}\text{ J}\cdot\text{s}$) across contact regimes.
 
-3. **Figure 3: 2D Floor Contact Rosette & Precessional Dynamics**
-    
+3. **Figure 3: 2D Floor Contact Rosette & Precessional Dynamics**  
    ![Figure 3: 2D Floor Contact Rosette & Precessional Dynamics](assets/tippe_top_floor_precession.png)  
    Support contact trajectory ($x_Q, y_Q$), illustrating epicycloidal rosette expansion on the belly, rim touchdown at $r = 21.08\text{ mm}$, gyroscopic precession rate ($\dot{\phi} = 191.51^\circ/\text{s}$), and transverse angular velocity damping ($\omega_\perp \to 0$).
 
-4. **Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope**
-
+4. **Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope**  
    ![Figure 4: Non-Linear Nutation Phase Space & Bifurcation Envelope](assets/tippe_top_phase_space.png)  
    Nutation phase portrait ($\theta, \dot{\theta}$) and spin decay ($\theta, \Omega$), verifying that the operational parameters remain within the deterministic inversion envelope.
 
