@@ -10,28 +10,50 @@ To address this limitation, this technical report introduces a discrete mechanic
 
 ---
 
-### Reference Experimental Rig (Rig-Alpha)
+### Universal System Parameters and Symbol Dictionary
 
-To establish an unambiguous physical benchmark, the formulation is evaluated on a precision-machined, asymmetric experimental rig operating under dry Coulomb sliding friction:
+The discrete mechanics framework (FL-Protocol) models the non-holonomic dynamics of any arbitrary rigid Tippe Top through the following universal parameter set. Any researcher or engineer can substitute their own physical measurements directly into these symbols:
 
-| Symbol | Parameter Description | Value | SI Unit |
-| :---: | :--- | :---: | :---: |
-| $M$ | Total Rigid Body Mass | `0.0800` | $\text{kg}$ |
-| $R$ | Spherical Body Outer Radius | `0.0250` | $\text{m}$ ($25.0\text{ mm}$) |
-| $c$ | Center-of-Mass Eccentricity Offset | `0.0045` | $\text{m}$ ($4.5\text{ mm}$) |
-| $r_{\text{stem}}$ | Cylindrical Peg/Stem Radius | `0.0035` | $\text{m}$ ($3.5\text{ mm}$) |
-| $h_{\text{stem}}$ | Protruding Stem Length | `0.0160` | $\text{m}$ ($16.0\text{ mm}$) |
-| $I_T$ | Transverse Moment of Inertia (CM) | $3.200 \times 10^{-5}$ | $\text{kg}\cdot\text{m}^2$ |
-| $I_S$ | Axial Spin Moment of Inertia (CM) | $2.400 \times 10^{-5}$ | $\text{kg}\cdot\text{m}^2$ |
-| $\mu_k, \mu_s$ | Coulomb Friction Coefficients (Kinetic / Static) | `0.180, 0.250` | — |
-| $\Omega_0$ | Initial Launch Angular Velocity | `210.0` | $\text{rad/s}$ ($2005.35\text{ RPM}$) |
-| $\theta_0$ | Initial Perturbation Tilt Angle | `0.030` | $\text{rad}$ ($1.72^\circ$) |
+| Symbol | Parameter Name | Physical Description & Role | SI Unit | Reference Benchmark (Rig-Alpha) |
+| :---: | :--- | :--- | :---: | :---: |
+| $M$ | Total Rigid Body Mass | Complete mass of the top | $\text{kg}$ | `0.0800` |
+| $R$ | Spherical Belly Radius | Outer radius of lower spherical envelope | $\text{m}$ | `0.0250` ($25.0\text{ mm}$) |
+| $c$ | Center-of-Mass Offset | Distance of CM below spherical geometric center | $\text{m}$ | `0.0045` ($4.5\text{ mm}$) |
+| $r_{\text{stem}}$ | Stem Radius | Outer radius of cylindrical stem contact rim | $\text{m}$ | `0.0035` ($3.5\text{ mm}$) |
+| $h_{\text{stem}}$ | Stem Length | Protruding vertical length of cylindrical stem | $\text{m}$ | `0.0160` ($16.0\text{ mm}$) |
+| $I_T$ | Transverse Moment of Inertia | Principal inertia orthogonal to symmetry axis at CM | $\text{kg}\cdot\text{m}^2$ | $3.200 \times 10^{-5}$ |
+| $I_S$ | Axial Spin Moment of Inertia | Principal inertia along symmetry spin axis at CM | $\text{kg}\cdot\text{m}^2$ | $2.400 \times 10^{-5}$ |
+| $\mu_k$ | Dynamic / Kinetic Friction | Coulomb coefficient of sliding contact friction | — | `0.180` |
+| $\mu_s$ | Static Friction | Coulomb coefficient of static contact adhesion | — | `0.250` |
+| $\Omega_0$ | Launch Angular Velocity | Initial spin velocity delivered to top at launch | $\text{rad/s}$ | `210.0` ($2005.35\text{ RPM}$) |
+| $\theta_0$ | Initial Tilt Perturbation | Initial nutation displacement angle (evaluated in radians) | $\text{rad}$ | `0.030` ($1.72^\circ$) |
+| $g$ | Gravitational Acceleration | Local standard gravitational acceleration | $\text{m/s}^2$ | `9.80665` |
+
+---
+
+### Auxiliary Derived Quantities and State Functions
+
+To facilitate exact closed-form evaluation without ambiguity, the intermediate state quantities and dimensionless conductances appearing across the governing equations are defined below:
+
+| Symbol | Derived Quantity Name | Analytical Closed-Form Definition | SI Unit | Physical Role in Dynamics | Reference Value (Rig-Alpha) |
+| :---: | :--- | :---: | :---: | :--- | :---: |
+| $E_0$ | Initial Spin Kinetic Energy | $\frac{1}{2} I_S \Omega_0^2$ | $\text{J}$ | Total rotational kinetic energy available at launch | `0.529200` |
+| $\Delta U$ | Potential Energy Elevation | $M g (h_{\text{stem}} + 2c)$ | $\text{J}$ | Gravitational work required to lift CM from belly to inverted stem | `0.0196133` |
+| $d_s$ | Inverted CM Pivot Height | $R + h_{\text{stem}} + c$ | $\text{m}$ | Center-of-mass height above support plane during inverted stem rotation | `0.04550` ($45.5\text{ mm}$) |
+| $\tau_0$ | Frictional Relaxation Timescale | $\frac{I_S \Omega_0}{\mu_k M g R}$ | $\text{s}$ | Characteristic Coulomb deceleration timescale governing precession decay | `1.427603` |
+| $\eta_{\text{geom}}$ | Geometric Kinematic Ratio | $\frac{R - c}{R + r_{\text{stem}}}$ | — | Contact lever-arm ratio between belly radius and stem capture rim | `0.719298` |
+| $\eta_{\text{drag}}$ | Ascent Sliding Conductance | $\left[1 + \left(\frac{c}{\mu_k R}\right)\left(\frac{\Delta U}{2 E_0}\right)\right]^{-1}$ | — | Conductance attenuation due to sliding friction work against gravity | `0.981806` |
+| $\eta_{\text{friction}}$ | Boundary Drag Conductance | $\left[1 + (\mu_s - \mu_k)\left(\frac{r_{\text{stem}}}{R - c}\right)\right]^{-1}$ | — | Conductance drop at the geometric boundary contact transition | `0.988190` |
+| $\eta_{\text{total}}$ | Total Composite Conductance | $\eta_{\text{geom}} \cdot \eta_{\text{drag}} \cdot \eta_{\text{friction}}$ | — | Total net angular velocity transmission ratio ($\Omega_{\text{inv}} / \Omega_0$) | `0.697873` |
+
+> [!NOTE]
+> The analytical formulations below are completely universal and apply to any rigid top geometry. The numerical values from `Rig-Alpha` are included alongside the equations solely to provide an exact, worked verification benchmark.
 
 ---
 
 ### Analytical Formulation of Discrete Invariants
 
-The discrete mechanics framework (FL-Protocol) models the inversion trajectory through four exact algebraic invariants, formulated directly in SI decimal units:
+The discrete mechanics framework (FL-Protocol) models the complete dynamic trajectory through four exact algebraic invariants, formulated directly in SI decimal units:
 
 #### 1. Inverted Terminal Spin Relation ($\Omega_{\text{inv}}$)
 During the transition between the baseline lever arm ($R - c$) and the inverted stem capture lever ($R + r_{\text{stem}}$), the intermediate contact radius $R$ cancels algebraically:
@@ -40,25 +62,45 @@ $$\eta_{\text{geom}} = \left(\frac{R - c}{\cancel{R}}\right) \left(\frac{\cancel
 
 Coupling this geometric transmission factor with the bounded rational conductance dividers for sliding friction yields the terminal inverted spin velocity:
 
-$$\Omega_{\text{inv}} = \Omega_0 \cdot \left(\frac{R - c}{R + r_{\text{stem}}}\right) \cdot \left[\frac{1}{1 + \left(\frac{c}{\mu_k R}\right)\left(\frac{\Delta U}{2 E_0}\right)}\right] \cdot \left[\frac{1}{1 + (\mu_s - \mu_k)\left(\frac{r_{\text{stem}}}{R - c}\right)}\right]$$
+$$\Omega_{\text{inv}} = \Omega_0 \cdot \eta_{\text{total}} = \Omega_0 \cdot \left(\frac{R - c}{R + r_{\text{stem}}}\right) \cdot \left[\frac{1}{1 + \left(\frac{c}{\mu_k R}\right)\left(\frac{\Delta U}{2 E_0}\right)}\right] \cdot \left[\frac{1}{1 + (\mu_s - \mu_k)\left(\frac{r_{\text{stem}}}{R - c}\right)}\right]$$
 
-For Rig-Alpha, this evaluates deterministically to:
-$$\mathbf{\Omega_{\text{inv}} = +146.5533\text{ rad/s}}$$
+Evaluating each component for the reference benchmark:
+- Geometric lever arm: $\eta_{\text{geom}} = \frac{0.0250 - 0.0045}{0.0250 + 0.0035} = \frac{0.0205}{0.0285} \approx 0.719298$
+- Potential ascent dissipation: $\eta_{\text{drag}} = \left[1 + \left(\frac{0.0045}{0.180 \times 0.0250}\right)\left(\frac{0.0196133}{2 \times 0.529200}\right)\right]^{-1} \approx 0.981806$
+- Rim friction boundary: $\eta_{\text{friction}} = \left[1 + (0.250 - 0.180)\left(\frac{0.0035}{0.0250 - 0.0045}\right)\right]^{-1} \approx 0.988190$
+- Composite conductance: $\eta_{\text{total}} = 0.719298 \times 0.981806 \times 0.988190 \approx 0.697873$
+
+Resulting terminal inverted spin:
+$$\mathbf{\Omega_{\text{inv}} = 210.0 \times 0.697873 = +146.5533\text{ rad/s}}$$
 
 #### 2. Friction-Bounded Conductance Formulation
-Unlike continuous formulations where numerical integrators encounter division-by-zero singularities as friction vanishes ($\mu_k \to 0^+$), the discrete formulation bounds sliding dissipation rationally against the gravitational ascent potential $\Delta U = M g (h_{\text{stem}} + 2c)$. In the zero-friction limit ($\mu_k \to 0$), the belly conductance $\eta_{\text{belly}} \to 0$, analytically preserving the un-erected state without computational instability.
+Unlike continuous formulations where numerical integrators encounter division-by-zero singularities as friction vanishes ($\mu_k \to 0^+$), the discrete formulation bounds sliding dissipation rationally against the gravitational ascent potential $\Delta U = M g (h_{\text{stem}} + 2c)$. In the zero-friction limit ($\mu_k \to 0$), the belly conductance denominator diverges to infinity, driving $\eta_{\text{drag}} \to 0$ and $\Omega_{\text{inv}} \to 0$, which analytically preserves the un-erected state without computational instability.
 
 #### 3. Analytical Inversion Timeline ($t_{\text{eq}}$ and $\tau_{\text{inv}}$)
-The equator-crossing duration ($t_{\text{eq}}$) and complete inverted sleeping time ($\tau_{\text{inv}}$) are derived via logarithmic half-angle cotangent relaxation:
+The equator-crossing duration ($t_{\text{eq}}$, corresponding to tilt $\theta = 90^\circ = \pi/2\text{ rad}$) and complete inverted sleeping time ($\tau_{\text{inv}}$, corresponding to $\theta = 180^\circ = \pi\text{ rad}$) are derived via logarithmic half-angle cotangent relaxation:
 
-$$t_{\text{eq}} = \left(\frac{I_S \Omega_0}{\mu_k M g R}\right) \left[ \left(\frac{c}{R - c}\right) \ln\left(\cot\frac{\theta_0}{2}\right) + \frac{\Delta U}{E_0} \right] = \mathbf{1.3690\text{ seconds}}$$
+$$t_{\text{eq}} = \tau_0 \cdot \left[ \left(\frac{c}{R - c}\right) \ln\left(\cot\frac{\theta_0}{2}\right) + \frac{\Delta U}{E_0} \right] = \left(\frac{I_S \Omega_0}{\mu_k M g R}\right) \left[ \left(\frac{c}{R - c}\right) \ln\left(\cot\frac{\theta_0}{2}\right) + \frac{\Delta U}{E_0} \right]$$
 
-$$\tau_{\text{inv}} = t_{\text{eq}} \left[ 1 + \left(\frac{I_S}{I_T}\right)\left(\frac{R - c}{R}\right) \right] = \mathbf{2.2109\text{ seconds}}$$
+Evaluating intermediate terms (with angle $\theta_0$ in radians):
+- Base relaxation timescale: $\tau_0 = \frac{(2.400 \times 10^{-5})(210.0)}{(0.180)(0.0800)(9.80665)(0.0250)} = 1.427603\text{ s}$
+- Half-angle cotangent: $\cot(\theta_0 / 2) = \cot(0.015\text{ rad}) \approx 66.6567 \implies \ln(66.6567) \approx 4.199555$
+- Normalized tilt lever: $\left(\frac{c}{R - c}\right) \ln\left(\cot\frac{\theta_0}{2}\right) = \left(\frac{0.0045}{0.0205}\right) \times 4.199555 \approx 0.921854$
+- Energy ratio: $\frac{\Delta U}{E_0} = \frac{0.0196133}{0.529200} \approx 0.037062$
+- Sum of bracket terms: $0.921854 + 0.037062 = 0.958916$
+
+$$t_{\text{eq}} = 1.427603 \times 0.958916 = \mathbf{1.3690\text{ seconds}}$$
+
+$$\tau_{\text{inv}} = t_{\text{eq}} \left[ 1 + \left(\frac{I_S}{I_T}\right)\left(\frac{R - c}{R}\right) \right] = 1.3690 \times \left[ 1 + \left(\frac{2.400 \times 10^{-5}}{3.200 \times 10^{-5}}\right)\left(\frac{0.0205}{0.0250}\right) \right] = \mathbf{2.2109\text{ seconds}}$$
 
 #### 4. Critical Stability and Inversion Thresholds
 The critical bifurcation conditions are evaluated through two distinct stability gates:
-- **Apex Stem Sleeping Threshold:** $\Omega_{\text{stem, min}} = \frac{2\sqrt{M g (R + h_{\text{stem}} + c) I_T}}{I_S} = \mathbf{89.0645\text{ rad/s}}$
-- **Belly-Release Inversion Barrier:** $\Omega_{\text{crit, release}} = \frac{1}{\eta_{\text{total}}} \sqrt{\Omega_{\text{stem, min}}^2 + \frac{2 M g (h_{\text{stem}} + 2c)}{I_S}} = \mathbf{140.1624\text{ rad/s}}$
+- **Apex Stem Sleeping Threshold:** Governed by the inverted center-of-mass lever $d_s = R + h_{\text{stem}} + c$:
+  $$\Omega_{\text{stem, min}} = \frac{2\sqrt{M g d_s I_T}}{I_S} = \frac{2\sqrt{M g (R + h_{\text{stem}} + c) I_T}}{I_S} = \mathbf{89.0645\text{ rad/s}}$$
+
+- **Belly-Release Inversion Barrier:** Incorporating the potential barrier ($\Delta U$) and composite conductance ($\eta_{\text{total}}$):
+  $$\Omega_{\text{crit, release}} = \frac{1}{\eta_{\text{total}}} \sqrt{\Omega_{\text{stem, min}}^2 + \frac{2 \Delta U}{I_S}} = \frac{1}{\eta_{\text{total}}} \sqrt{\Omega_{\text{stem, min}}^2 + \frac{2 M g (h_{\text{stem}} + 2c)}{I_S}} = \mathbf{140.1624\text{ rad/s}}$$
+
+*Inversion Criterion:* Complete inversion occurs if and only if initial launch velocity $\Omega_0 > \Omega_{\text{crit, release}}$. For Rig-Alpha, $\Omega_0 = 210.0\text{ rad/s} > 140.1624\text{ rad/s}$, ensuring full inversion.
 
 ---
 
