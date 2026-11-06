@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23866609.svg)](https://doi.org/10.5281/zenodo.23866609)
 
-**Author:** Ameen Khan [engine@shap.online] | **Repository:** [SHAP-STUDIO/Research](https://github.com/SHAP-STUDIO/Research) | **DOI:** [10.5281/zenodo.23866609](https://doi.org/10.5281/zenodo.23866609)
+**Author:** Ameen Ullah Khan [engine@shap.online] | **Repository:** [SHAP-STUDIO/Research](https://github.com/SHAP-STUDIO/Research) | **DOI:** [10.5281/zenodo.23866609](https://doi.org/10.5281/zenodo.23866609)
 
 ***
 
